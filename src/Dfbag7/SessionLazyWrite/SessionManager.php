@@ -26,4 +26,18 @@ class SessionManager extends LaravelSessionManager
     {
         return new Store($this->app['config']['session.cookie'], $handler);
     }
+
+    /**
+     * Create an instance of the database session driver.
+     *
+     * @return \Illuminate\Session\Store
+     */
+    protected function createDatabaseDriver()
+    {
+        $connection = $this->getDatabaseConnection();
+
+        $table = $this->app['config']['session.table'];
+
+        return $this->buildSession(new DatabaseSessionHandler($connection, $table));
+    }
 }
